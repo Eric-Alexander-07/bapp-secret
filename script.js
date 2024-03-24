@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let food = { x: 0, y: 0 }; // Food coordinates
 
+  let gameLoop;
+
   function draw() {
       // Clear the canvas
       ctx.clearRect(0, 0, canvasSize, canvasSize);
@@ -65,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (head.x === snake[i].x && head.y === snake[i].y) {
               // Snake collided with itself, game over
               clearInterval(gameLoop);
-              alert('Game Over!');
+              document.getElementById('game-over-screen').style.display = 'flex';
               return;
           }
       }
@@ -82,33 +84,52 @@ document.addEventListener('DOMContentLoaded', () => {
       food.y = Math.floor(Math.random() * tileCount);
   }
 
-  function main() {
-      update();
+  function startGame() {
+      // Reset snake position and direction
+      snake = [
+          { x: 10, y: 10 },
+          { x: 10, y: 11 },
+          { x: 10, y: 12 }
+      ];
+      dx = 0;
+      dy = -1;
+
+      // Hide start screen and game over screen
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('game-over-screen').style.display = 'none';
+
+      // Generate initial food
+      generateFood();
+
+      // Start game loop
+      gameLoop = setInterval(update, 1000 / 10);
+
+      // Add event listener for controlling the snake
+      document.addEventListener('keydown', event => {
+          const keyPressed = event.key;
+
+          if (keyPressed === 'ArrowUp' && dy !== 1) {
+              dx = 0;
+              dy = -1;
+          }
+          if (keyPressed === 'ArrowDown' && dy !== -1) {
+              dx = 0;
+              dy = 1;
+          }
+          if (keyPressed === 'ArrowLeft' && dx !== 1) {
+              dx = -1;
+              dy = 0;
+          }
+          if (keyPressed === 'ArrowRight' && dx !== -1) {
+              dx = 1;
+              dy = 0;
+          }
+      });
   }
 
-  // Generate initial food
-  generateFood();
+  document.getElementById('start-screen').addEventListener('click', startGame);
+  document.getElementById('game-over-screen').addEventListener('click', startGame);
 
-  const gameLoop = setInterval(main, 1000 / 10);
-
-  document.addEventListener('keydown', event => {
-      const keyPressed = event.key;
-
-      if (keyPressed === 'ArrowUp' && dy !== 1) {
-          dx = 0;
-          dy = -1;
-      }
-      if (keyPressed === 'ArrowDown' && dy !== -1) {
-          dx = 0;
-          dy = 1;
-      }
-      if (keyPressed === 'ArrowLeft' && dx !== 1) {
-          dx = -1;
-          dy = 0;
-      }
-      if (keyPressed === 'ArrowRight' && dx !== -1) {
-          dx = 1;
-          dy = 0;
-      }
-  });
+  // Initial display: Show start screen
+  document.getElementById('start-screen').style.display = 'flex';
 });

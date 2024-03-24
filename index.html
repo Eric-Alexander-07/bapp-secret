@@ -7,8 +7,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="container">
+        <div id="game-container">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            <div id="start-screen" class="overlay">
+                <h2>Snake Game</h2>
+                <p>Click to Play</p>
+            </div>
+            <div id="game-over-screen" class="overlay">
+                <h2>Game Over</h2>
+                <p>Click to Play Again</p>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

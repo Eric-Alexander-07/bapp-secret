@@ -103,32 +103,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Start game loop
       gameLoop = setInterval(update, 1000 / 10);
+  }
 
-      // Add event listener for controlling the snake
-      document.addEventListener('keydown', event => {
-          const keyPressed = event.key;
+  function handleKeyDown(event) {
+      const keyPressed = event.key;
 
-          if (keyPressed === 'ArrowUp' && dy !== 1) {
-              dx = 0;
-              dy = -1;
-          }
-          if (keyPressed === 'ArrowDown' && dy !== -1) {
-              dx = 0;
-              dy = 1;
-          }
-          if (keyPressed === 'ArrowLeft' && dx !== 1) {
-              dx = -1;
-              dy = 0;
-          }
-          if (keyPressed === 'ArrowRight' && dx !== -1) {
-              dx = 1;
-              dy = 0;
-          }
-      });
+      if (keyPressed === 'ArrowUp' && dy !== 1) {
+          dx = 0;
+          dy = -1;
+      }
+      if (keyPressed === 'ArrowDown' && dy !== -1) {
+          dx = 0;
+          dy = 1;
+      }
+      if (keyPressed === 'ArrowLeft' && dx !== 1) {
+          dx = -1;
+          dy = 0;
+      }
+      if (keyPressed === 'ArrowRight' && dx !== -1) {
+          dx = 1;
+          dy = 0;
+      }
+  }
+
+  function handleTouchStart(event) {
+      event.preventDefault(); // Prevent default touch behavior
+      const touch = event.touches[0];
+      const xDiff = touch.clientX - canvas.offsetLeft;
+      const yDiff = touch.clientY - canvas.offsetTop;
+      const isHorizontalSwipe = Math.abs(xDiff) > Math.abs(yDiff);
+
+      if (isHorizontalSwipe) {
+          dx = xDiff > 0 ? 1 : -1;
+          dy = 0;
+      } else {
+          dy = yDiff > 0 ? 1 : -1;
+          dx = 0;
+      }
   }
 
   document.getElementById('start-screen').addEventListener('click', startGame);
   document.getElementById('game-over-screen').addEventListener('click', startGame);
+  document.addEventListener('keydown', handleKeyDown);
+  canvas.addEventListener('touchstart', handleTouchStart);
 
   // Initial display: Show start screen
   document.getElementById('start-screen').style.display = 'flex';

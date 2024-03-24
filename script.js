@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const tileSize = 20;
   const tileCount = 20;
-  const canvasSize = tileSize * tileCount;
+  let canvasSize = tileSize * tileCount;
 
   let snake = [
       { x: 10, y: 10 },
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function draw() {
       // Clear the canvas
-      ctx.clearRect(0, 0, canvasSize, canvasSize);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw food
       ctx.fillStyle = 'red';
@@ -97,6 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide start screen and game over screen
       document.getElementById('start-screen').style.display = 'none';
       document.getElementById('game-over-screen').style.display = 'none';
+
+      // Adjust canvas size based on screen size
+      const maxWidth = window.innerWidth - 20; // Subtracting 20 to avoid scrollbars
+      const maxHeight = window.innerHeight - 20;
+      const maxTileSize = Math.floor(Math.min(maxWidth, maxHeight) / tileCount);
+      canvasSize = maxTileSize * tileCount;
+      canvas.width = canvasSize;
+      canvas.height = canvasSize;
 
       // Generate initial food
       generateFood();

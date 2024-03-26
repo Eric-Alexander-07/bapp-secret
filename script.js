@@ -98,19 +98,37 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('start-screen').style.display = 'none';
       document.getElementById('game-over-screen').style.display = 'none';
 
-      // Adjust canvas size based on screen size
-      const maxWidth = window.innerWidth - 20; // Subtracting 20 to avoid scrollbars
-      const maxHeight = window.innerHeight - 20;
-      const maxTileSize = Math.floor(Math.min(maxWidth, maxHeight) / tileCount);
-      canvasSize = maxTileSize * tileCount;
-      canvas.width = canvasSize;
-      canvas.height = canvasSize;
-
       // Generate initial food
       generateFood();
 
       // Start game loop
       gameLoop = setInterval(update, 1000 / 10);
+  }
+
+  function up() {
+    console.log(true);
+    if (dy !== 1) {
+        dx = 0;
+        dy = -1;
+    }
+  }
+  function down() {
+    if (dy !== -1) {
+        dx = 0;
+        dy = 1;
+    }
+  }
+  function left() {
+    if (dx !== 1) {
+        dx = -1;
+        dy = 0;
+    }
+  }
+  function right() {
+    if (dx !== -1) {
+        dx = 1;
+        dy = 0;
+    }
   }
 
   function handleKeyDown(event) {
@@ -134,27 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   }
 
-  function handleTouchStart(event) {
-      event.preventDefault(); // Prevent default touch behavior
-      const touch = event.touches[0];
-      const xDiff = touch.clientX - canvas.offsetLeft;
-      const yDiff = touch.clientY - canvas.offsetTop;
-      const isHorizontalSwipe = Math.abs(xDiff) > Math.abs(yDiff);
-
-      if (isHorizontalSwipe) {
-          dx = xDiff > 0 ? 1 : -1;
-          dy = 0;
-      } else {
-          dy = yDiff > 0 ? 1 : -1;
-          dx = 0;
-      }
-  }
-
   document.getElementById('start-screen').addEventListener('click', startGame);
   document.getElementById('game-over-screen').addEventListener('click', startGame);
   document.addEventListener('keydown', handleKeyDown);
-  canvas.addEventListener('touchstart', handleTouchStart);
-
+  document.getElementById('up').addEventListener('click', up)
+  document.getElementById('down').addEventListener('click', down)
+  document.getElementById('left').addEventListener('click', left)
+  document.getElementById('right').addEventListener('click', right)
   // Initial display: Show start screen
   document.getElementById('start-screen').style.display = 'flex';
+
+  // Update canvas size when the window is resized
 });
